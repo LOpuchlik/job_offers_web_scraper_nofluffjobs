@@ -23,9 +23,10 @@ def get_jobs(num_jobs, slp_time):
     driver.implicitly_wait(5)
 
     #keyword=""
+    page = 1
 
-
-    url="https://nofluffjobs.com/pl/?gclid=CjwKCAjwt7SWBhAnEiwAx8ZLalFn7q9GmI1YOjJrr-_whP-yLQGBHs8nfXb_lajjmo-lhfyo9DoDYhoC-jwQAvD_BwE&criteria=keyword%3Ddata,analyst&page=1"
+    url="https://nofluffjobs.com/pl/?gclid=CjwKCAjwt7SWBhAnEiwAx8ZLalFn7q9GmI1YOjJrr-_whP-yLQGBHs8nfXb_lajjmo-lhfyo9DoDYhoC-jwQAvD_BwE&criteria=keyword%3Ddata,analyst&page="+str(page)
+    #print(f'Url: {url}')
     driver.get(url)
 
     jobs = []
@@ -37,7 +38,7 @@ def get_jobs(num_jobs, slp_time):
         pass
 
     while len(jobs) < num_jobs:
-        time.sleep(10)
+        time.sleep(5)
 
         #Going through each job in this page
         job_postings=driver.find_elements(By.XPATH, '//a[contains(@class,"posting-list-item")]')
@@ -83,18 +84,21 @@ def get_jobs(num_jobs, slp_time):
                     contract_type = -1
                     print("Exception")
                     time.sleep(.5)
+            
+        page += 1
+        print(f'Page {page}')
 
   #Clicking on the "next page" button
-        # try:
-        #     url = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/nfj-root/nfj-layout/nfj-main-content/div/nfj-postings-search/div/common-main-loader/div/nfj-search-results/div/nfj-pagination/ul/li[5]/a'))).get_attribute('href')
-        #     driver.get(url)
-        #     print("Clicked for next page")
-        #     WebDriverWait(driver, 10).until(EC.staleness_of(driver.find_element(By.XPATH, '/html/body/nfj-root/nfj-layout/nfj-main-content/div/nfj-postings-search/div/common-main-loader/div/nfj-search-results/div/nfj-pagination/ul/li[5]/a')))
-        # except TimeoutException:
-        #     print("Scraping terminated before reaching target number of jobs. Needed {}, got {}.".format(num_jobs, len(jobs)))
-        #     break
+        try:
+            url_raw = "https://nofluffjobs.com/pl/?gclid=CjwKCAjwt7SWBhAnEiwAx8ZLalFn7q9GmI1YOjJrr-_whP-yLQGBHs8nfXb_lajjmo-lhfyo9DoDYhoC-jwQAvD_BwE&criteria=keyword%3Ddata,analyst&page="
+            url = url_raw + str(page)
+            time.sleep(5)
+            print(url)
+            driver.get(url)
+            print("Clicked for next page")
+        except TimeoutException:
+            print("Scraping terminated before reaching target number of jobs. Needed {}, got {}.".format(num_jobs, len(jobs)))
+            break
 
-   
 
     return pd.DataFrame(jobs)
-
