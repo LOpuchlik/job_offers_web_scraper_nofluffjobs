@@ -65,8 +65,8 @@ def get_jobs(num_jobs, slp_time):
                     company_name = driver.find_element(By.XPATH, '//*[@id="postingCompanyUrl"]').get_property('text')
                     location = driver.find_element(By.XPATH, '/html/body/nfj-root/nfj-layout/nfj-main-content/div/nfj-posting-details/common-main-loader/section/div[2]/div[2]/common-apply-box/div[1]/div[2]/div/ul').text
                     job_title = driver.find_element(By.XPATH, '//*[@id="posting-header"]/div/div/h1').text
-                    salary_estimate = driver.find_element(By.XPATH, '//*[@class="mb-0"]').text
-                    contract_type = driver.find_element(By.XPATH, '//*[@class="paragraph font-size-14 d-flex align-items-center flex-wrap type position-relative"]').text
+                    salary_estimate = driver.find_element(By.XPATH, '//div[@class="salary"]').text
+                    contract_type = driver.find_element(By.XPATH, '//div[@class="paragraph font-size-14 d-flex align-items-center flex-wrap type position-relative"]').text
                     jobs.append({
                     "Job Title" : job_title,
                     "Salary Estimate" : salary_estimate,
